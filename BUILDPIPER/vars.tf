@@ -33,13 +33,13 @@ variable "key_name" {
   default     = ""
 }
 
-variable "public_subnet_id" {
+variable "private_subnet_id" {
   description = "ID of the subnet for the EC2 instances"
   type        = string
   default     = "subnet-12345678"
 }
 
-variable "vpn_sg_ids" {
+variable "buildpiper_sg_ids" {
   description = "List of security group IDs for the EC2 instances"
   type        = list(string)
   default     = []
