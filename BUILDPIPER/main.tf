@@ -1,9 +1,6 @@
 locals {
   buildpiper_sg_ids     = var.buildpiper_sg_ids
   private_subnet_id = var.private_subnet_id
-  buildpiper_sg_name=var.buildpiper_sg_name
-  buildpiper_sg_ingress_rule=var.buildpiper_sg_ingress_rule
-  vpc_id=var.vpc_id
 }
 
 module "ec2_instance" {
@@ -23,11 +20,4 @@ module "ec2_instance" {
   ec2_name             = var.ec2_name
   tags                 = var.tags
 }
-module "buildpiper_sg" {
-  source                             = "git@github.com:OT-CLOUD-KIT/terraform-aws-security-groups.git?ref=v0.0.1"
-  name_sg                            = local.buildpiper_sg_name
-  enable_source_security_group_entry = true
-  vpc_id                             =  var.vpc_id
-  ingress_rule                       = local.buildpiper_sg_ingress_rule
-  tags                               = var.buildpiper_sg_tags
-}
+
