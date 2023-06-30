@@ -1,7 +1,7 @@
 locals {
   buildpiper_sg_ids     = var.buildpiper_sg_ids
   private_subnet_id = var.private_subnet_id
-  buildpiper_sg_name var.buildpiper_sg_name
+  buildpiper_sg_name=var.buildpiper_sg_name
   buildpiper_sg_ingress_rule=var.buildpiper_sg_ingress_rule
   vpc_id=var.vpc_id
 }
