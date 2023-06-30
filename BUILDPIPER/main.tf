@@ -20,4 +20,11 @@ module "ec2_instance" {
   ec2_name             = var.ec2_name
   tags                 = var.tags
 }
-
+module "buildpiper_sg" {
+  source                             = "git@github.com:OT-CLOUD-KIT/terraform-aws-security-groups.git?ref=v0.0.1"
+  name_sg                            = local.buildpiper_sg_name
+  enable_source_security_group_entry = true
+  vpc_id                             = data.terraform_remote_state.remote.outputs.vpc_id
+  ingress_rule                       = local.buildpiper_sg_ingress_rule
+  tags                               = var.buildpiper_sg_tags
+}
