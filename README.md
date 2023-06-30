@@ -6,6 +6,8 @@ I'll steup EC2 using opstree tf module
 * Clone the code available at [BP-BUILDPIPER-EC2-STEP](https://github.com/OT-BUILDPIPER-MARKETPLACE/BP-BUILDPIPER-EC2-STEP)
 * Build the docker image
 
+  
+
 ```
 git submodule init
 git submodule update
