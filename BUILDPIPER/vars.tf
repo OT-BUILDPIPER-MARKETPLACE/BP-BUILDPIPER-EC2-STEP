@@ -84,9 +84,11 @@ variable "sg_name" {
 variable "openvpn_sg_id" {
   description = "Name of the security group"
   type        = list(string)
+  default = [ "sg-1234" ]
 }
 
 variable "vpc_id" {
   description = "Name of the security group"
   type        =  string
+  default = "vpc-1234"
 }
