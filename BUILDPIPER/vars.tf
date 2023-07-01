@@ -39,11 +39,7 @@ variable "private_subnet_id" {
   default     = "subnet-12345678"
 }
 
-variable "buildpiper_sg_ids" {
-  description = "List of security group IDs for the EC2 instances"
-  type        = list(string)
-  default     = []
-}
+
 
 variable "volume_size" {
   description = "Size of the root volume for the EC2 instances (in GB)"
@@ -80,5 +76,17 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+variable "sg_name" {
+  description = "Name of the security group"
+  type        = string
+}
 
+variable "openvpn_sg_id" {
+  description = "Name of the security group"
+  type        = list(string)
+}
 
+variable "vpc_id" {
+  description = "Name of the security group"
+  type        =  string
+}

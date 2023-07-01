@@ -1,9 +1,7 @@
 locals {
-  buildpiper_sg_ids     = var.buildpiper_sg_ids
+  vpc_id         = var.vpc_id
   private_subnet_id = var.private_subnet_id
-  buildpiper_sg_name var.buildpiper_sg_name
-  buildpiper_sg_ingress_rule=var.buildpiper_sg_ingress_rule
-  vpc_id=var.vpc_id
+  openvpn_sg_id = var.openvpn_sg_id
 }
 
 module "ec2_instance" {
@@ -15,7 +13,7 @@ module "ec2_instance" {
   public_ip            = var.public_ip
   key_name             = var.key_name
   subnet               = local.private_subnet_id
-  security_groups      = local.buildpiper_sg_ids
+  security_groups      = [module.buildpiper_security_group.sg_id]
   volume_size          = var.volume_size
   volume_type          = var.volume_type
   encrypted_volume     = var.encrypted_volume
@@ -23,11 +21,45 @@ module "ec2_instance" {
   ec2_name             = var.ec2_name
   tags                 = var.tags
 }
-module "buildpiper_sg" {
-  source                             = "git@github.com:OT-CLOUD-KIT/terraform-aws-security-groups.git?ref=v0.0.1"
-  name_sg                            = local.buildpiper_sg_name
-  enable_source_security_group_entry = true
-  vpc_id                             =  var.vpc_id
-  ingress_rule                       = local.buildpiper_sg_ingress_rule
-  tags                               = var.buildpiper_sg_tags
+module "buildpiper_security_group" {
+  source                              = "OT-CLOUD-KIT/security-groups/aws"
+  version                             = "1.0.0"
+  name_sg                             = var.sg_name
+  tags                                = var.tags
+  enable_whitelist_ip                 = false
+  enable_source_security_group_entry  = true
+  create_outbound_rule_with_src_sg_id = false
+
+  vpc_id = local.vpc_id
+  ingress_rule = {
+    rules = {
+      rule_list = [
+         {
+      description  = "Allow port 22 for ssh"
+      from_port    = 22
+      to_port      = 22
+      protocol     = "tcp"
+      cidr         = []      
+      source_SG_ID = local.openvpn_sg_id
+    },
+    {
+      description  = "Allow port 80 for vpn"
+      from_port    = 80
+      to_port      = 80
+      protocol     = "tcp"
+      cidr         = []     
+      source_SG_ID = local.openvpn_sg_id
+    },
+    {
+      description  = "Allow port 9001 for vpn "
+      from_port    = 9001
+      to_port      = 9001
+      protocol     = "tcp"
+      cidr         = []
+      ipv6_cidr    = []
+      source_SG_ID = local.openvpn_sg_id
+    }
+      ]
+    }
+  }
 }
