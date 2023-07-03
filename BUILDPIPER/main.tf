@@ -2,6 +2,7 @@ locals {
   vpc_id         = var.vpc_id
   private_subnet_id = var.private_subnet_id
   openvpn_sg_id = var.openvpn_sg_id
+  openvpn_ip = var.openvpn_ip
 }
 
 module "ec2_instance" {
@@ -26,7 +27,7 @@ module "buildpiper_security_group" {
   version                             = "1.0.0"
   name_sg                             = var.sg_name
   tags                                = var.tags
-  enable_whitelist_ip                 = false
+  enable_whitelist_ip                 = true
   enable_source_security_group_entry  = true
   create_outbound_rule_with_src_sg_id = false
 
@@ -39,7 +40,7 @@ module "buildpiper_security_group" {
       from_port    = 22
       to_port      = 22
       protocol     = "tcp"
-      cidr         = []      
+      cidr         = [local.openvpn_ip]      
       source_SG_ID = local.openvpn_sg_id
     },
     {
@@ -47,7 +48,7 @@ module "buildpiper_security_group" {
       from_port    = 80
       to_port      = 80
       protocol     = "tcp"
-      cidr         = []     
+      cidr         = [local.openvpn_ip]     
       source_SG_ID = local.openvpn_sg_id
     },
     {
@@ -55,7 +56,7 @@ module "buildpiper_security_group" {
       from_port    = 9001
       to_port      = 9001
       protocol     = "tcp"
-      cidr         = []
+      cidr         = [local.openvpn_ip]
       ipv6_cidr    = []
       source_SG_ID = local.openvpn_sg_id
     }
